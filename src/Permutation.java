@@ -13,9 +13,5 @@ public class Permutation {
             System.out.println(queue.dequeue());
         }
 
-        for (String s : queue) {
-            System.out.println(s);
-        }
-
     }
 }

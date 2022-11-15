@@ -74,14 +74,22 @@ public class Deque<Item> implements Iterable<Item> {
         if (this.isEmpty()) {
             throw new NoSuchElementException();
         }
+        if (size() == 1) {
+            Item item = first.value;
+            last = null;
+            first = null;
+            counter--;
+            return item;
+        } else {
 
-        Item item = first.value;
-        first = first.next;
-        if (first != null) {
-            first.prev = null;
+            Item item = first.value;
+            first = first.next;
+            if (first != null) {
+                first.prev = null;
+            }
+            counter--;
+            return item;
         }
-        counter--;
-        return item;
     }
 
     // remove and return the item from the back
@@ -89,15 +97,22 @@ public class Deque<Item> implements Iterable<Item> {
         if (this.isEmpty()) {
             throw new NoSuchElementException();
         }
+        if (size() == 1) {
+            Item item = last.value;
+            last = null;
+            first = null;
+            counter--;
+            return item;
+        } else {
 
-
-        Item item = last.value;
-        last = last.prev;
-        if (last != null) {
-            last.next = null;
+            Item item = last.value;
+            last = last.prev;
+            if (last != null) {
+                last.next = null;
+            }
+            counter--;
+            return item;
         }
-        counter--;
-        return item;
     }
 
     // return an iterator over items in order from front to back

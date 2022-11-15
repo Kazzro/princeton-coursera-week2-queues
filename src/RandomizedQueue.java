@@ -35,20 +35,19 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // add the item
     public void enqueue(Item item) {
         if (item == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
-        Node current = first;
         if (size() == 0) {
             first = new Node(item);
-            counter++;
         } else {
+            Node current = first;
             while (current.next != null) {
                 current = current.next;
             }
             current.next = new Node(item);
-            counter++;
         }
+        counter++;
     }
 
     // remove and return a random item
@@ -58,14 +57,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NoSuchElementException();
         }
 
-        if (counter == 1) {
-            Item item = first.value;
-            first = null;
-            counter--;
-            return item;
-        }
-
         int zaehler = (int) (Math.random() * counter);
+
         if (zaehler == 0) {
             Item item = first.value;
             first = first.next;
@@ -99,7 +92,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             return first.value;
         }
         Node current = first;
-        while (zaehler-- > 1) {
+        while (zaehler-- >= 1) {
             current = current.next;
         }
         return current.value;
