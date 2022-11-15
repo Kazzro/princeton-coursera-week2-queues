@@ -13,8 +13,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
     }
 
-    Node first;
-    int counter;
+    private Node first;
+    private int counter;
 
     // construct an empty randomized queue
     public RandomizedQueue() {
@@ -66,23 +66,23 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
 
         int zaehler = (int) (Math.random() * counter);
-        counter--;
         if (zaehler == 0) {
             Item item = first.value;
             first = first.next;
+            counter--;
             return item;
         }
         Node current = first;
         Node oldCurrent = null;
-        while (zaehler > 1) {
+        while (zaehler >= 1) {
             oldCurrent = current;
             current = current.next;
-
             zaehler--;
         }
         Item item = current.value;
         if (oldCurrent != null) {
             oldCurrent.next = current.next;
+            counter--;
         }
         return item;
 
@@ -99,7 +99,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             return first.value;
         }
         Node current = first;
-        while (zaehler-- >= 1) {
+        while (zaehler-- > 1) {
             current = current.next;
         }
         return current.value;
@@ -121,6 +121,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         @Override
         public Item next() {
+            if (!this.hasNext()) {
+                throw new NoSuchElementException();
+            }
             Item item = current.value;
             current = current.next;
             return item;
@@ -129,7 +132,24 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-
+        RandomizedQueue<String> queue = new RandomizedQueue<>();
+        System.out.println("Adding 1-5");
+        queue.enqueue("1");
+        queue.enqueue("2");
+        queue.enqueue("3");
+        queue.enqueue("4");
+        queue.enqueue("5");
+        for (String s : queue) {
+            System.out.print(s + " ");
+        }
+        System.out.printf("\nRandom item: %s\n", queue.sample());
+        System.out.println("Removing 2 items");
+        queue.dequeue();
+        queue.dequeue();
+        for (String s : queue) {
+            System.out.print(s + " ");
+        }
+        System.out.printf("\nSize: %d", queue.size());
     }
 
 }

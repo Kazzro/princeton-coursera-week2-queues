@@ -2,9 +2,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
-    Node first;
-    Node last;
-    int counter;
+    private Node first;
+    private Node last;
+    private int counter;
 
     private class Node {
         Node next;
@@ -36,17 +36,17 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the front
     public void addFirst(Item item) {
         if (item == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
+        Node add = new Node(item);
 
         if (this.isEmpty()) {
-            first = new Node(item);
+            first = add;
             last = first;
         } else {
-            Node current = first;
-            first = new Node(item);
-            current.next = first;
-            first.prev = current;
+            add.next = first;
+            first.prev = add;
+            first = add;
         }
         counter++;
     }
@@ -54,19 +54,18 @@ public class Deque<Item> implements Iterable<Item> {
     // add the item to the back
     public void addLast(Item item) {
         if (item == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
 
+        Node add = new Node(item);
         if (this.isEmpty()) {
-            last = new Node(item);
+            last = add;
             first = last;
         } else {
-            Node current = last;
-            last = new Node(item);
-            current.prev = last;
-            last.next = current;
+            add.prev = last;
+            last.next = add;
+            last = add;
         }
-
         counter++;
     }
 
@@ -77,8 +76,10 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         Item item = first.value;
-        first = first.prev;
-        first.next = null;
+        first = first.next;
+        if (first != null) {
+            first.prev = null;
+        }
         counter--;
         return item;
     }
@@ -91,25 +92,23 @@ public class Deque<Item> implements Iterable<Item> {
 
 
         Item item = last.value;
-        last = last.next;
-        last.prev = null;
+        last = last.prev;
+        if (last != null) {
+            last.next = null;
+        }
         counter--;
         return item;
     }
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
-        return new DequeIterator<Item>();
+        return new DequeIterator();
     }
 
 
-    private class DequeIterator<Item> implements Iterator<Item> {
+    private class DequeIterator implements Iterator<Item> {
 
-        private Node current;
-
-        public DequeIterator() {
-            this.current = first;
-        }
+        private Node current = first;
 
         @Override
         public boolean hasNext() {
@@ -122,7 +121,7 @@ public class Deque<Item> implements Iterable<Item> {
                 throw new NoSuchElementException();
             }
 
-            Item item = (Item) current.value;
+            Item item = current.value;
             current = current.next;
             return item;
         }
@@ -136,7 +135,27 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
+//        Deque<String> deque = new Deque<>();
+//        deque.addFirst("to chew bubblegum");
+//        deque.addLast("and");
+//        deque.addFirst("I'm here");
+//        deque.addLast("kick ass");
+//        for (String s : deque) {
+//            System.out.print(s + " ");
+//        }
+//        System.out.println("\n\n" + deque.removeFirst());
+//        System.out.println(deque.removeLast());
+//        deque.addLast("I'm all out of bubblegum");
+//        System.out.println(deque.removeFirst());
+//        System.out.println();
+//        for (String s : deque) {
+//            System.out.print(s + " ");
+//        }
 
+        Deque<Integer> deque2 = new Deque<>();
+        deque2.addFirst(1);
+        System.out.println(deque2.removeLast());
+        System.out.println(deque2.counter);
     }
 
 }
